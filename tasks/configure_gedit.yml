@@ -14,8 +14,6 @@
   ansible.builtin.copy:
     src: "lavanda.xml"
     dest: "{{ gedit_user_theme_path }}/lavanda.xml"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_effective_group_id }}"
     mode: "0755"
 
 - name: Configure gedit settings

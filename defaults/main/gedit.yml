@@ -1,6 +1,6 @@
 ---
 
-gedit_user_theme_path: "{{ ansible_env.HOME }}/.local/share/gtksourceview-4/styles/"
+gedit_user_theme_path: "/home/{{ user }}/.local/share/gtksourceview-4/styles/"
 
 gedit_settings:
   "/org/gnome/gedit/preferences/editor/highlight-current-line": "true"

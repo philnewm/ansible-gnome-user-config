@@ -18,8 +18,6 @@
     src: monitors.xml.j2
     dest: "{{ gdm_monitor_config_user_path }}/monitors.xml"
     mode: "0644"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_effective_group_id }}"
 
 - name: Get Gnome version
   become: true
@@ -83,6 +81,13 @@
   become_user: "{{ user }}"
   ansible.builtin.set_fact:
     extensions: "{{ extensions_list_result.stdout_lines }}"
+
+- name: Enable installed extensions
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/shell/enabled-extensions"
+    value: "{{ extensions | to_json }}"
 
 - name: Config found extensions
   loop: "{{ gnome_extension_settings }}"

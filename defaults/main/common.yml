@@ -30,7 +30,7 @@ gnome_packages:
     - gnome-shell-extension-prefs
     - gnome-control-center
 
-gdm_monitor_config_user_path: "{{ ansible_env.HOME }}/.config"
+gdm_monitor_config_user_path: "/home/{{ user }}/.config"
 
 gnome_base_settings:
   "dconf_default": &dconf_default
