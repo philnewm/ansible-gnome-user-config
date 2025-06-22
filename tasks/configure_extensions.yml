@@ -1,0 +1,11 @@
+---
+
+- name: "Configure extension {{ extension_setting.name }}"
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ extension_setting.dconf_settings | dict2items }}"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+
+...

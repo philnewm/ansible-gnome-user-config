@@ -1,11 +1,114 @@
 ---
 
-# Install tasks
-# INFO larger roles should only use **include_tasks** here
-
-
-# INFO This task may be obsolete for your use-case
 - name: Gather package facts
   ansible.builtin.package_facts:
+
+- name: Create user default resolution path
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.file:
+    path: "{{ gdm_monitor_config_user_path }}"
+    state: directory
+    mode: "0700"
+
+- name: Set user default resolution
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.template:
+    src: monitors.xml.j2
+    dest: "{{ gdm_monitor_config_user_path }}/monitors.xml"
+    mode: "0644"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_effective_group_id }}"
+
+- name: Get Gnome version
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      gnome-shell --version | awk '{print $3}' | cut -d'.' -f1
+  args:
+    executable: /bin/bash
+  register: gnome_major_version_result
+  changed_when: false
+
+- name: Set gnome major version
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.set_fact:
+    gnome_major_version: "{{ gnome_major_version_result.stdout }}"
+
+- name: Configure basic gnome-settings
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+  loop: "{{ gnome_base_settings[gnome_major_version] | dict2items }}"
+
+- name: Get installed GNOME themes
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.find:
+    paths: "{{ theme_paths }}"
+    file_type: directory
+    depth: 1
+  register: theme_dirs
+
+- name: Set themes list
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.set_fact:
+    themes: "{{ theme_dirs.files | map(attribute='path') | map('basename') | list }}"
+
+- name: Config found themes
+  loop: "{{ gnome_theme_settings }}"
+  loop_control:
+    loop_var: theme_setting
+  when: theme_setting.name in themes
+  ansible.builtin.include_tasks:
+    file: configure_themes.yml
+
+- name: Get installed GNOME extensions
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.command:
+    cmd: "ls {{ extension_path_system }}"
+  register: extensions_list_result
+  changed_when: false
+
+- name: Set extensions list
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.set_fact:
+    extensions: "{{ extensions_list_result.stdout_lines }}"
+
+- name: Config found extensions
+  loop: "{{ gnome_extension_settings }}"
+  loop_control:
+    loop_var: extension_setting
+  when: extension_setting.address in extensions
+  ansible.builtin.include_tasks:
+    file: configure_extensions.yml
+
+- name: Configure nautilus settings
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ nautilus_settings[gnome_major_version] | dict2items }}"
+  when: "'nautilus' in ansible_facts.packages"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+
+- name: Configure gedit
+  when: "'gedit' in ansible_facts.packages"
+  ansible.builtin.include_tasks:
+    file: configure_gedit.yml
+
+- name: Configure terminal profile
+  when: "'gnome-terminal' in ansible_facts.packages"
+  ansible.builtin.include_tasks:
+    file: configure_terminal.yml
 
 ...

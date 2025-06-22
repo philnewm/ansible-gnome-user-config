@@ -1,0 +1,12 @@
+---
+
+# INFO gnome-software-center not picking up theme on centos stream 9
+- name: "Configure theme {{ theme_setting.name }}"
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ theme_setting.dconf_settings | dict2items }}"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+
+...

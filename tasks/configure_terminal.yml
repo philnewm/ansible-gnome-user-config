@@ -1,0 +1,19 @@
+---
+
+- name: Configure gnome-terminal settings
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ gnome_terminal_settings | dict2items }}"
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+
+- name: Configure terminal profile
+  become: true
+  become_user: "{{ user }}"
+  loop: "{{ terminal_profile_settings | dict2items }}"
+  community.general.dconf:
+    key: "{{ terminal_profile_path }}/{{ item.key }}"
+    value: "{{ item.value | string }}"
+
+...

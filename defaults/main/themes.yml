@@ -1,0 +1,29 @@
+---
+
+themes_path: "/usr/share/themes"
+icons_path: "/usr/share/icons"
+wallpapers_path: "/usr/share/backgrounds"
+
+theme_paths:
+  - "{{ themes_path }}"
+  - "{{ icons_path }}"
+  - "{{ wallpapers_path }}"
+
+gnome_theme_settings:
+  - name: "Lavanda-Dark"
+    dconf_settings:
+      "/org/gnome/desktop/interface/gtk-theme": "'Lavanda-Dark'"
+      "/org/gnome/shell/extensions/user-theme/name": "'Lavanda-Dark'"
+  - name: "Tela-circle-purple-dark"
+    dconf_settings:
+      "/org/gnome/desktop/interface/icon-theme": "'Tela-circle-purple-dark'"
+  - name: "Qogir-cursors"
+    dconf_settings:
+      "/org/gnome/desktop/interface/cursor-theme": "'Qogir-cursors'"
+  - name: "Dynamic_Wallpapers"
+    dconf_settings:
+      "/org/gnome/desktop/background/picture-options": "'zoom'"
+      "/org/gnome/desktop/background/picture-uri": "'file:///usr/share/backgrounds/Dynamic_Wallpapers/BigSur.xml'"
+      "/org/gnome/desktop/background/picture-uri-dark": "'file:///usr/share/backgrounds/Dynamic_Wallpapers/BigSur.xml'"
+
+...
