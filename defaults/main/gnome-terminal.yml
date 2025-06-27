@@ -16,6 +16,7 @@ terminal_profile_path: "/org/gnome/terminal/legacy/profiles:/:{{ terminal_profil
 
 terminal_profile_settings:
   "visible-name": "'default'"
+  "audible-bell": "false"
   "background-color": "'rgb(28,28,28)'"
   "background-transparency-percent": "20"
   "bold-color": "'rgb(147,15,182)'"
