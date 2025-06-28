@@ -1,7 +1,5 @@
 ---
 
-# State switch
-
 
 - name: "Desired state is {{ state }}"
   ansible.builtin.include_tasks:

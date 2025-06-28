@@ -3,7 +3,7 @@
 - name: Gather package facts
   ansible.builtin.package_facts:
 
-- name: Create user default resolution path
+- name: "Create default resolution path for {{ user }}"
   become: true
   become_user: "{{ user }}"
   ansible.builtin.file:
@@ -37,7 +37,7 @@
   ansible.builtin.set_fact:
     gnome_major_version: "{{ gnome_major_version_result.stdout }}"
 
-- name: Configure basic gnome-settings
+- name: "Configure basic gnome-settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
   community.general.dconf:
@@ -60,7 +60,7 @@
   ansible.builtin.set_fact:
     themes: "{{ theme_dirs.files | map(attribute='path') | map('basename') | list }}"
 
-- name: Config found themes
+- name: "Config found themes for {{ user }}"
   loop: "{{ gnome_theme_settings }}"
   loop_control:
     loop_var: theme_setting
@@ -82,14 +82,14 @@
   ansible.builtin.set_fact:
     extensions: "{{ extensions_list_result.stdout_lines }}"
 
-- name: Enable installed extensions
+- name: "Enable installed extensions for {{ user }}"
   become: true
   become_user: "{{ user }}"
   community.general.dconf:
     key: "/org/gnome/shell/enabled-extensions"
     value: "{{ extensions | to_json }}"
 
-- name: Config found extensions
+- name: "Config found extensions {{ user }}"
   loop: "{{ gnome_extension_settings }}"
   loop_control:
     loop_var: extension_setting
@@ -97,7 +97,7 @@
   ansible.builtin.include_tasks:
     file: configure_extensions.yml
 
-- name: Configure nautilus settings
+- name: "Configure nautilus settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
   loop: "{{ nautilus_settings[gnome_major_version] | dict2items }}"
@@ -106,12 +106,12 @@
     key: "{{ item.key }}"
     value: "{{ item.value | string }}"
 
-- name: Configure gedit
+- name: "Configure gedit for {{ user }}"
   when: "'gedit' in ansible_facts.packages"
   ansible.builtin.include_tasks:
     file: configure_gedit.yml
 
-- name: Configure terminal profile
+- name: "Configure terminal profile {{ user }}"
   when: "'gnome-terminal' in ansible_facts.packages"
   ansible.builtin.include_tasks:
     file: configure_terminal.yml
