@@ -1,0 +1,27 @@
+---
+
+- name: Set name for the custom keybinding
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/{{ shortcut.id }}/name"
+    value: "'{{ shortcut.name }}'"
+    state: present
+
+- name: Set command for the custom keybinding
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/{{ shortcut.id }}/command"
+    value: "'{{ shortcut.command }}'"
+    state: present
+
+- name: Set binding for the custom keybinding
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/{{ shortcut.id }}/binding"
+    value: "'{{ shortcut.binding }}'"
+    state: present
+
+...

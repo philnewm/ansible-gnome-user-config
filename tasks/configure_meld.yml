@@ -1,9 +1,9 @@
 ---
 
-- name: "Configure theme {{ theme_setting.name }}"
+- name: Configure meld
   become: true
   become_user: "{{ user }}"
-  loop: "{{ theme_setting.dconf_settings | dict2items }}"
+  loop: "{{ meld_settings | dict2items }}"
   community.general.dconf:
     key: "{{ item.key }}"
     value: "{{ item.value | string }}"

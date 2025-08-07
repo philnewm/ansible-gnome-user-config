@@ -45,6 +45,23 @@
     value: "{{ item.value | string }}"
   loop: "{{ gnome_base_settings[gnome_major_version] | dict2items }}"
 
+- name: Set custom shortcut paths
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+    value: "{{ shortcuts_list }}"
+    state: present
+
+- name: "Configure custom keyboard shortcuts for {{ user }}"
+  when: enable_custom_keyboard_shortcuts
+  loop: "{{ custom_keyboard_shortcuts }}"
+  loop_control:
+    label: "{{ shortcut.name }}"
+    loop_var: shortcut
+  ansible.builtin.include_tasks:
+    file: keyboard_shortcuts.yml
+
 - name: Get installed GNOME themes
   become: true
   become_user: "{{ user }}"
@@ -59,6 +76,10 @@
   become_user: "{{ user }}"
   ansible.builtin.set_fact:
     themes: "{{ theme_dirs.files | map(attribute='path') | map('basename') | list }}"
+
+- name: "Set favorite apps for {{ user }}"
+  ansible.builtin.include_tasks:
+    file: favorite.yml
 
 - name: "Config found themes for {{ user }}"
   loop: "{{ gnome_theme_settings }}"
@@ -111,9 +132,14 @@
   ansible.builtin.include_tasks:
     file: configure_gedit.yml
 
-- name: "Configure terminal profile {{ user }}"
+- name: "Configure terminal profile for {{ user }}"
   when: "'gnome-terminal' in ansible_facts.packages"
   ansible.builtin.include_tasks:
     file: configure_terminal.yml
+
+- name: "Configure meld for {{ user }}"
+  when: "'meld' in ansible_facts.packages"
+  ansible.builtin.include_tasks:
+    file: configure_meld.yml
 
 ...

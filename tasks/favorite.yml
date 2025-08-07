@@ -1,0 +1,47 @@
+---
+
+# INFO dconf module is session dependent in some cases like favorite apps and can't see values from terminla session
+- name: Get current favorite apps
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.command:
+    cmd: >
+      gsettings get org.gnome.shell favorite-apps
+  register: current_favorites
+  changed_when: false
+
+- name: Clean favorites
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.set_fact:
+    gnome_favorites: "{{ current_favorites.stdout | from_yaml | default([], true) }}"
+
+- name: Show
+  ansible.builtin.debug:
+    var: gnome_favorites
+
+- name: Merge and filter favorites (custom + existing - excluded)
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.set_fact:
+    merged_gnome_favorites: >-
+      {{
+        (gnome_favorites + gnome_custom_favorites)
+        | unique
+        | difference(gnome_exclude_favorites | default([]))
+      }}
+
+- name: Show
+  ansible.builtin.debug:
+    var: merged_gnome_favorites
+
+- name: Set new favorites
+  become: true
+  become_user: "{{ user }}"
+  when: gnome_favorites | difference(gnome_custom_favorites) | length > 0
+  community.general.dconf:
+    key: /org/gnome/shell/favorite-apps
+    value: "{{ merged_gnome_favorites }}"
+    state: present
+
+...

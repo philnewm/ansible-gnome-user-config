@@ -10,6 +10,21 @@ gdm_vbox_display_name:
   "RedHat": "Virtual-1"
   "Debian": "Virtual1"
 
+gnome_custom_favorites:
+  - org.gnome.Nautilus.desktop
+  - org.gnome.Terminal.desktop
+
+gnome_exclude_favorites:
+  - firefox.desktop
+  - org.gnome.Calendar.desktop
+  - org.gnome.Music.desktop
+  - org.gnome.Software.desktop
+  - yelp.desktop
+  - firefox-esr.desktop
+  - rhythmbox.desktop
+  - libreoffice-writer.desktop
+  - org.gnome.Evolution.desktop
+
 gnome_packages:
   "default": &gnome_pkgs_default
     - gnome-shell
@@ -68,5 +83,24 @@ gnome_base_settings:
     "/org/gnome/desktop/privacy/recent-files-max-age": "30"
     "/org/gnome/desktop/privacy/remove-old-temp-files": "true"
     "/org/gnome/desktop/privacy/remove-old-trash-files": "true"
+
+enable_custom_keyboard_shortcuts: true
+
+# TODO build dynamically from custom_keyboard_shortcuts dict
+shortcuts_list: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/nautilus/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/terminal/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/mission_center/']"
+
+custom_keyboard_shortcuts:
+  - name: "File Browser"
+    id: "nautilus"
+    binding: "<Super>e"
+    command: "nautilus"
+  - name: "Terminal"
+    id: "terminal"
+    binding: "<Super>t"
+    command: "gnome-terminal"
+  - name: "Mission Center"
+    id: "mission_center"
+    binding: "<Primary><Shift>Escape"
+    command: "missioncenter"
 
 ...
