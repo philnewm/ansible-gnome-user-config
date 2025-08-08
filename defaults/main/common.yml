@@ -101,6 +101,6 @@ custom_keyboard_shortcuts:
   - name: "Mission Center"
     id: "mission_center"
     binding: "<Primary><Shift>Escape"
-    command: "missioncenter"
+    command: "flatpak run io.missioncenter.MissionCenter"
 
 ...

@@ -42,6 +42,20 @@
       but got '{{ entry.value }}' instead for key '{{ entry.item.key }}'."
     quiet: true
 
+- name: Get custom shortcut paths
+  become: true
+  become_user: "{{ user }}"
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+    state: "read"
+  register: present_keyboard_shrotcuts
+
+- name: Test Custom keyboard shortcuts
+  ansible.builtin.assert:
+    that: present_keyboard_shrotcuts.value == shortcuts_list
+    fail_msg: "Failed to find expected keyboard shortcuts, got this: {{ present_keyboard_shrotcuts }}"
+    quiet: true
+
 - name: Combine all dconf_settings into one dictionary
   ansible.builtin.set_fact:
     all_ext_dconf_settings: "{{ gnome_extension_settings | map(attribute='dconf_settings') | list | combine }}"

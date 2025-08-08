@@ -81,13 +81,30 @@
   ansible.builtin.include_tasks:
     file: favorite.yml
 
-- name: "Config found themes for {{ user }}"
+- name: "Configure found themes for {{ user }}"
   loop: "{{ gnome_theme_settings }}"
   loop_control:
     loop_var: theme_setting
   when: theme_setting.name in themes
   ansible.builtin.include_tasks:
     file: configure_themes.yml
+
+- name: Get current flatpak overrides
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.command:
+    cmd: flatpak override --show --user
+  register: flatpak_overrides_result
+  changed_when: false
+
+- name: Set flatpak theme override
+  become: true
+  become_user: "{{ user }}"
+  when: "'GTK_THEME=Adwaita:dark' not in flatpak_overrides_result.stdout_lines"
+  ansible.builtin.command:
+    cmd: flatpak override --user --env=GTK_THEME=Adwaita:dark
+  register: flatpak_theme_result
+  changed_when: flatpak_theme_result.rc == 0
 
 - name: Get installed GNOME extensions
   become: true
