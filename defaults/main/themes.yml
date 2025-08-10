@@ -23,7 +23,7 @@ gnome_theme_settings:
   - name: "Dynamic_Wallpapers"
     dconf_settings:
       "/org/gnome/desktop/background/picture-options": "'zoom'"
-      "/org/gnome/desktop/background/picture-uri": "'file:///usr/share/backgrounds/Dynamic_Wallpapers/BigSur.xml'"
-      "/org/gnome/desktop/background/picture-uri-dark": "'file:///usr/share/backgrounds/Dynamic_Wallpapers/BigSur.xml'"
+      "/org/gnome/desktop/background/picture-uri": "'file:///usr/share/backgrounds/dynamic_wallpapers/BigSur.xml'"
+      "/org/gnome/desktop/background/picture-uri-dark": "'file:///usr/share/backgrounds/dynamic_wallpapers/BigSur.xml'"
 
 ...
