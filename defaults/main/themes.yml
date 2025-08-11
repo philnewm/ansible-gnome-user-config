@@ -9,6 +9,7 @@ theme_paths:
   - "{{ icons_path }}"
   - "{{ wallpapers_path }}"
 
+# INFO names value need to be equal to directory names
 gnome_theme_settings:
   - name: "Lavanda-Dark"
     dconf_settings:
@@ -20,7 +21,7 @@ gnome_theme_settings:
   - name: "Qogir-cursors"
     dconf_settings:
       "/org/gnome/desktop/interface/cursor-theme": "'Qogir-cursors'"
-  - name: "Dynamic_Wallpapers"
+  - name: "dynamic_wallpapers"
     dconf_settings:
       "/org/gnome/desktop/background/picture-options": "'zoom'"
       "/org/gnome/desktop/background/picture-uri": "'file:///usr/share/backgrounds/dynamic_wallpapers/BigSur.xml'"
