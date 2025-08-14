@@ -70,11 +70,11 @@ gnome_base_settings:
     "/org/gnome/software/first-run": "false"
   "40":
     # INFO obsolete if custom theme gets set
-    "/org/gnome/desktop/interface/gtk-theme": "'Adwaita-dark'"
+    # "/org/gnome/desktop/interface/gtk-theme": "'Adwaita-dark'"
     <<: *dconf_default
   "42":
     # INFO obsolete if custom theme gets set
-    "/org/gnome/shell/extensions/user-theme/name": "'Yaru-magenta-dark'"
+    # "/org/gnome/shell/extensions/user-theme/name": "'Yaru-magenta-dark'"
     <<: *dconf_default
     "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
   "43":
