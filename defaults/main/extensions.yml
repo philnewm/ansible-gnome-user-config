@@ -35,7 +35,7 @@ gnome_extension_settings:
       "/org/gnome/shell/extensions/dash-to-panel/dot-style-unfocused": "'DASHES'"
       "/org/gnome/shell/extensions/dash-to-panel/group-apps": "true"
       "/org/gnome/shell/extensions/dash-to-panel/hotkeys-overlay-combo": "'TEMPORARILY'"
-      "/org/gnome/shell/extensions/dash-to-panel/intellihide": "true"
+      "/org/gnome/shell/extensions/dash-to-panel/intellihide": "false"
       "/org/gnome/shell/extensions/dash-to-panel/intellihide-hide-from-windows": "true"
       "/org/gnome/shell/extensions/dash-to-panel/leftbox-padding": "-1"
       "/org/gnome/shell/extensions/dash-to-panel/leftbox-size": "14"
