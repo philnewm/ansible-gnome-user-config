@@ -46,6 +46,7 @@ gnome_packages:
     - gnome-control-center
 
 gdm_monitor_config_user_path: "/home/{{ user }}/.config"
+gnome_settings_fallback: "43"
 
 gnome_base_settings:
   "dconf_default": &dconf_default
@@ -72,18 +73,22 @@ gnome_base_settings:
     # INFO obsolete if custom theme gets set
     # "/org/gnome/desktop/interface/gtk-theme": "'Adwaita-dark'"
     <<: *dconf_default
-  "42":
+  "42": &42  # global dark theme
     # INFO obsolete if custom theme gets set
     # "/org/gnome/shell/extensions/user-theme/name": "'Yaru-magenta-dark'"
     <<: *dconf_default
     "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
-  "43":
-    <<: *dconf_default
+  "43": &43
+    <<: *42
     "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
     "/org/gnome/desktop/privacy/old-files-age": "30"
     "/org/gnome/desktop/privacy/recent-files-max-age": "30"
     "/org/gnome/desktop/privacy/remove-old-temp-files": "true"
     "/org/gnome/desktop/privacy/remove-old-trash-files": "true"
+  "47":
+    <<: *43
+  "49":
+    <<: *43
 
 enable_custom_keyboard_shortcuts: true
 

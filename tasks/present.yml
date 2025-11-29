@@ -40,10 +40,10 @@
 - name: "Configure basic gnome-settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
+  loop: "{{ (gnome_base_settings[gnome_major_version] | dict2items) | default(gnome_base_settings[gnome_settings_fallback] | dict2items) }}"
   community.general.dconf:
     key: "{{ item.key }}"
     value: "{{ item.value | string }}"
-  loop: "{{ gnome_base_settings[gnome_major_version] | dict2items }}"
 
 - name: Set custom shortcut paths
   become: true
@@ -138,7 +138,7 @@
 - name: "Configure nautilus settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
-  loop: "{{ nautilus_settings[gnome_major_version] | dict2items }}"
+  loop: "{{ (nautilus_settings[gnome_major_version] | dict2items) | default(nautilus_settings[gnome_settings_fallback] | dict2items) }}"
   when: "'nautilus' in ansible_facts.packages"
   community.general.dconf:
     key: "{{ item.key }}"

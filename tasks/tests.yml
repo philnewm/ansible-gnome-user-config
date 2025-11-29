@@ -21,7 +21,7 @@
 - name: Get gnome base settings
   become: true
   become_user: "{{ user }}"
-  loop: "{{ gnome_base_settings[gnome_major_version] | dict2items }}"
+  loop: "{{ (gnome_base_settings[gnome_major_version] | dict2items) | default(gnome_base_settings[gnome_settings_fallback] | dict2items) }}"
   community.general.dconf:
     key: "{{ item.key }}"
     state: read
@@ -116,9 +116,9 @@
   when: "'nautilus' in ansible_facts.packages"
   block:
     - name: Get nautilus settings
-      loop: "{{ nautilus_settings[gnome_major_version].keys() }}"
+      loop: "{{ (nautilus_settings[gnome_major_version] | dict2items) | default(nautilus_settings[gnome_settings_fallback] | dict2items) }}"
       community.general.dconf:
-        key: "{{ item }}"
+        key: "{{ item.key }}"
         state: read
       register: dconf_list
 
@@ -126,12 +126,12 @@
       loop: "{{ dconf_list.results }}"
       loop_control:
         loop_var: entry
-        label: "{{ entry.item }}"
+        label: "{{ entry.item.key }}"
       ansible.builtin.assert:
         that:
-          - entry.value == nautilus_settings[gnome_major_version][entry.item]
+          - entry.value == nautilus_settings[gnome_major_version][entry.item.key]
         fail_msg: |
-          "Expected value '{{ nautilus_settings[gnome_major_version][entry.item] }}'
+          "Expected value '{{ nautilus_settings[gnome_major_version][entry.item.key] }}'
           but got '{{ entry.value }}' instead for key '{{ entry.item }}'."
         quiet: true
 
@@ -229,5 +229,6 @@
       {{ gdm_default_resolution_y }} was expected, got
         {{ user_width_value.matches[0] }}x{{ user_height_value.matches[0] }}
         instead"
+    quiet: true
 
 ...
