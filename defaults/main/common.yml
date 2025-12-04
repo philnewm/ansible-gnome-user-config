@@ -80,7 +80,6 @@ gnome_base_settings:
     "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
   "43": &43
     <<: *42
-    "/org/gnome/desktop/interface/color-scheme": "'prefer-dark'"
     "/org/gnome/desktop/privacy/old-files-age": "30"
     "/org/gnome/desktop/privacy/recent-files-max-age": "30"
     "/org/gnome/desktop/privacy/remove-old-temp-files": "true"
