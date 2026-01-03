@@ -37,6 +37,13 @@
   ansible.builtin.set_fact:
     gnome_major_version: "{{ gnome_major_version_result.stdout }}"
 
+- name: Ensure `dbus-run-session` is available
+  become: true
+  when: ansible_facts.os_family | lower == "redhat"
+  ansible.builtin.dnf:
+    name: dbus-daemon
+    state: present
+
 - name: "Configure basic gnome-settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
