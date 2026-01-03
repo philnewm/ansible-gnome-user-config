@@ -47,7 +47,7 @@
 - name: "Configure basic gnome-settings for {{ user }}"
   become: true
   become_user: "{{ user }}"
-  loop: "{{ (gnome_base_settings[gnome_major_version] | dict2items) | default(gnome_base_settings[gnome_settings_fallback] | dict2items) }}"
+  loop: "{{ gnome_base_settings.get(gnome_major_version, gnome_base_settings[gnome_settings_fallback]).items() }}"
   community.general.dconf:
     key: "{{ item.key }}"
     value: "{{ item.value | string }}"
